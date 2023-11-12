@@ -45,6 +45,7 @@ def plot_data_overview(
     vmax: float | None = None,
     svd_cycler: Cycler | None = PlotStyle().cycler,
     use_svd_number: bool = False,
+    model_label: str = "Time (ps)", global_label: str = "Wavelength (nm)"
 ) -> tuple[Figure, Axes] | tuple[Figure, Axis]:
     """Plot data as filled contour plot and SVD components.
 
@@ -80,6 +81,10 @@ def plot_data_overview(
     use_svd_number : bool
         Whether to use singular value number (starts at 1) instead of singular value index
         (starts at 0) for labeling in plot. Defaults to False.
+    model_label: str
+        Axes label for model axis. Defaults to "Time (ps)".
+    global_label: str
+        Axes label for model axis. Defaults to "Wavelength (nm)".
 
     Returns
     -------
@@ -123,7 +128,8 @@ def plot_data_overview(
         cycler=svd_cycler,
         use_svd_number=use_svd_number,
     )
-    plot_sv_data(dataset, sv_ax)
+    plot_sv_data(dataset, sv_ax,
+        use_svd_number=use_svd_number)
     plot_rsv_data(
         dataset,
         rsv_ax,
@@ -132,6 +138,13 @@ def plot_data_overview(
         cycler=svd_cycler,
         use_svd_number=use_svd_number,
     )
+    sv_ax.set_ylabel("")
+    lsv_ax.set_ylabel("")
+    rsv_ax.set_ylabel("")
+    lsv_ax.set_xlabel(model_label)
+    rsv_ax.set_xlabel(global_label)
+    data_ax.set_xlabel(model_label)
+    data_ax.set_ylabel(global_label)
     if show_data_svd_legend is True:
         rsv_ax.legend(
             title="singular value number" if use_svd_number else "singular_value_index",
