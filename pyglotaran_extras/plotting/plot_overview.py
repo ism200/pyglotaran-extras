@@ -53,6 +53,7 @@ def plot_overview(
     das_cycler: Cycler | None | UnsetType = Unset,
     svd_cycler: Cycler | None | UnsetType = Unset,
     use_svd_number: bool = False,
+    model_label: str = "Time (ps)", global_label: str = "Wavelength (nm)"
 ) -> tuple[Figure, Axes]:
     """Plot overview of the optimization result.
 
@@ -109,7 +110,10 @@ def plot_overview(
     use_svd_number : bool
         Whether to use singular value number (starts at 1) instead of singular value index
         (starts at 0) for labeling in plot. Defaults to False.
-
+    model_label: str
+        Axes label for model axis. Defaults to "Time (ps)".
+    global_label: str
+        Axes label for model axis. Defaults to "Wavelength (nm)".
     Returns
     -------
     tuple[Figure, Axes]
@@ -144,9 +148,19 @@ def plot_overview(
         main_irf_nr=main_irf_nr,
         cycler=cycler,
     )
+    axes[0,0].set_xlabel(model_label)
+    axes[0,0].set_ylabel("")
     plot_spectra(
         res, axes[0:2, 1:3], cycler=cycler, show_zero_line=show_zero_line, das_cycler=das_cycler
     )
+    axes[0,1].set_xlabel(global_label)
+    axes[0,1].set_ylabel("")
+    axes[0,2].set_xlabel(global_label)
+    axes[0,2].set_ylabel("")
+    axes[1,1].set_xlabel(global_label)
+    axes[1,1].set_ylabel("")
+    axes[1,2].set_xlabel(global_label)
+    axes[1,2].set_ylabel("")
     plot_svd(
         res,
         axes[2:4, 0:3],
@@ -160,6 +174,16 @@ def plot_overview(
         irf_location=irf_location,
         use_svd_number=use_svd_number,
     )
+    axes[2,1].set_xlabel(global_label)
+    axes[2,1].set_ylabel("")
+    axes[2,0].set_xlabel(model_label)
+    axes[2,0].set_ylabel("")
+    axes[2,2].set_ylabel("")
+    axes[3,1].set_xlabel(global_label)
+    axes[3,1].set_ylabel("")
+    axes[3,0].set_xlabel(model_label)
+    axes[3,0].set_ylabel("")
+    axes[3,2].set_ylabel("")
     plot_residual(
         res,
         axes[1, 0],
@@ -170,6 +194,8 @@ def plot_overview(
         show_irf_dispersion_center=show_irf_dispersion_center,
         irf_location=irf_location,
     )
+    axes[1,0].set_xlabel(model_label)
+    axes[1,0].set_ylabel(global_label)
     if figure_only is not None:
         warn(PyglotaranExtrasApiDeprecationWarning(FIG_ONLY_WARNING), stacklevel=2)
     return fig, axes
