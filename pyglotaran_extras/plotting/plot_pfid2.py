@@ -139,7 +139,11 @@ def plot_pfid2(
                     label=oscillation_label, frequency=frequency, rate=rate
                 ),
             )
-    axes[0,0].set_title(f"Oscillations {spectral}")
+    axes[0,0].set_title(f"Cos Oscillations {spectral}")
+    axes[1,0].set_title(f"Sin Oscillations {spectral}")
+    axes[0,0].set_xlabel("Time (ps)")
+    axes[1,0].set_xlabel("Time (ps)")
+
 
     (oscillations_spectra / spectra_max * scales / norm_factor).plot.line(x="spectral", ax=axes[0,2])
 
@@ -149,11 +153,13 @@ def plot_pfid2(
     axes[1,2].set_title("Phases")
 
     axes[0,2].set_ylabel("Normalized DOAS" if normalize is True else "DOAS")
+    axes[0,2].set_xlabel("Wavenumber (1/cm)")
 
     axes[1,2].set_yticks(
         *calculate_ticks_in_units_of_pi(pfid_phase), rotation="horizontal"
     )
     axes[1,2].set_ylabel("Phase (π)")
+    axes[1,2].set_xlabel("Wavenumber (1/cm)")
 
     for axes_index, oscillation_type in enumerate(["_cos","_sin"]):
         for pfidname in pfid:
@@ -165,6 +171,8 @@ def plot_pfid2(
     else:
         axes[0,0].legend()
 
+    axes[0,1].set_xlabel("Wavenumber (1/cm)")
+    axes[1,1].set_xlabel("Wavenumber (1/cm)")
     axes[1,0].get_legend().remove()
     # axes[1,1].get_legend().remove()
     axes[0,2].get_legend().remove()
